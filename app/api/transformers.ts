@@ -1,4 +1,10 @@
-import { Address, FacilityType, FoodFacility, FoodFacilityCSV, Status } from "./types";
+import {
+  Address,
+  FacilityType,
+  FoodFacility,
+  FoodFacilityCSV,
+  Status,
+} from "../../types/FoodFacilityTypes";
 
 const ASSESSORS_ADDRESS_BEGINNING = "ASSESSORS";
 

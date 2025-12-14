@@ -1,6 +1,6 @@
 import { createReadStream } from "node:fs";
 import csv from "csv-parser";
-import { FoodFacility, FoodFacilityCSV, Status } from "./types";
+import { FoodFacility, FoodFacilityCSV, Status } from "../../types/FoodFacilityTypes";
 import BigNumber from "bignumber.js";
 import { prettifyCsvData } from "./transformers";
 
