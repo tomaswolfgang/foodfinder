@@ -1,0 +1,23 @@
+// ----- COLORS -----
+$color-primary: #428dff;
+$color-secondary: #c6d8fb;
+$color-background: #fff;
+$color-background-2: #d9d9d9;
+$color-focus: #f1f1f1;
+$color-border: #e3e3e3;
+
+$color-text-primary: #000001;
+$color-text-secondary: #515151;
+$color-text-subtle: #929292;
+
+// ---- media query -----
+$media-tablet: 768px;
+$media-desktop: 912px;
+
+// ----- spacing, position, and depth -----
+$padding: 1rem;
+
+// ------ misc ------
+$transition-time: 0.2s;
+$border-radius: 5px;
+$border: solid 1px $color-border;

@@ -1,0 +1,41 @@
+@use "@styles/variables";
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+// extendable defaults
+.transition {
+  transition: background-color variables.$transition-time, margin-right variables.$transition-time,
+    opacity variables.$transition-time;
+}
+
+// depth
+
+.layer-overlay-top {
+  z-index: 5;
+}
+.layer-overlay {
+  z-index: 4;
+}
+.layer-top {
+  z-index: 3;
+}
+.layer-middle {
+  z-index: 2;
+}
+.layer-bottom {
+  z-index: 1;
+}
+
+.interactable {
+  cursor: pointer;
+  @extend .transition;
+  background-color: variables.$color-background;
+
+  &:hover {
+    background-color: variables.$color-focus;
+  }
+}

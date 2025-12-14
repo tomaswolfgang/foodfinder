@@ -1,0 +1,119 @@
+@use "@styles/global";
+@use "@styles/variables";
+@use "@styles/mixins";
+
+$sidenav-width: 320px;
+
+.link {
+  display: none;
+  text-decoration: none;
+  color: variables.$color-text-primary;
+  padding: 0.5rem;
+  border-radius: variables.$border-radius;
+
+  @extend .interactable;
+
+  @include mixins.tablet-up {
+    display: block;
+  }
+}
+
+.sideNavMenu {
+  border: none;
+  cursor: pointer;
+  padding: variables.$padding;
+  border-radius: 50%;
+
+  @extend .interactable;
+
+  @include mixins.tablet-up {
+    display: none;
+  }
+}
+
+.sideNavOverlayContainer {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  top: -100vh;
+  left: 0;
+  &Active {
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  &Exit {
+    transition-property: top, background-color;
+    transition-duration: 0s, variables.$transition-time;
+    transition-delay: variables.$transition-time, 0s;
+  }
+
+  @extend .transition;
+  @extend .layer-overlay;
+  @include mixins.tablet-up {
+    display: none;
+  }
+}
+
+.sideNavOverlay {
+  cursor: pointer;
+  height: 100%;
+  flex-grow: 1;
+}
+
+.sideNav {
+  background-color: variables.$color-background;
+  margin-right: -$sidenav-width;
+  width: $sidenav-width;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-left: variables.$border;
+  box-shadow: 1px 0px 7px variables.$color-border;
+  cursor: initial;
+
+  &Active {
+    margin-right: 0px;
+  }
+
+  @extend .transition;
+  @extend .layer-overlay-top;
+
+  @include mixins.tablet-up {
+    display: none;
+  }
+}
+
+.sideNavHeader {
+  width: 100%;
+  padding: variables.$padding;
+  border-bottom: variables.$border;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sideNavClose {
+  @extend .sideNavMenu;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.mobileLink {
+  text-decoration: none;
+  color: variables.$color-text-primary;
+  background-color: variables.$color-background;
+  box-sizing: border-box;
+  border-bottom: variables.$border;
+  padding: variables.$padding;
+  width: 100%;
+
+  @extend .interactable;
+
+  &:hover {
+    background-color: variables.$color-focus;
+  }
+}
