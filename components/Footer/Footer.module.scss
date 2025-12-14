@@ -1,0 +1,21 @@
+@use "@styles/variables";
+@use "@styles/mixins";
+
+.footerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: variables.$padding;
+  box-sizing: border-box;
+  background-color: variables.$color-background;
+  border-top: variables.$border;
+  height: variables.$mobile-footer-height;
+  max-height: variables.$mobile-footer-height;
+  font-size: 0.5rem;
+  color: variables.$color-text-subtle;
+
+  @include mixins.tablet-up {
+    height: variables.$footer-height;
+    max-height: variables.$footer-height;
+  }
+}

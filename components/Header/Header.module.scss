@@ -2,8 +2,6 @@
 @use "@styles/variables";
 @use "@styles/mixins";
 
-$logo-height: 70px;
-
 .header {
   display: flex;
   flex-direction: row;
@@ -15,8 +13,15 @@ $logo-height: 70px;
   top: 0;
   background-color: variables.$color-background;
   box-shadow: 0px -1px 7px variables.$color-border;
-
+  height: variables.$mobile-header-height;
+  max-height: variables.$mobile-header-height;
+  box-sizing: border-box;
   @extend .layer-top;
+
+  @include mixins.tablet-up {
+    height: variables.$header-height;
+    max-height: variables.$header-height;
+  }
 
   @include mixins.desktop-up {
     justify-content: center;
@@ -24,8 +29,13 @@ $logo-height: 70px;
 }
 
 .logo {
-  height: $logo-height;
+  height: 50px;
+  max-height: 50px;
   width: auto;
+  @include mixins.tablet-up {
+    height: 70px;
+    max-height: 70px;
+  }
 }
 .logoLink {
   display: none;

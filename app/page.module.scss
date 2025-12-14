@@ -1,0 +1,16 @@
+@use "@styles/variables";
+@use "@styles/mixins";
+
+.pageContainer {
+  height: calc(100vh - variables.$mobile-footer-height - variables.$mobile-header-height);
+  max-height: calc(100vh - variables.$mobile-footer-height - variables.$mobile-header-height);
+  width: 100%;
+  box-sizing: border-box;
+  background-color: variables.$color-background;
+  padding: variables.$padding;
+
+  @include mixins.tablet-up {
+    height: calc(100vh - variables.$footer-height - variables.$header-height);
+    max-height: calc(100vh - variables.$footer-height - variables.$header-height);
+  }
+}
