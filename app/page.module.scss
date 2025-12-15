@@ -8,6 +8,7 @@
   box-sizing: border-box;
   background-color: variables.$color-background;
   padding: variables.$padding;
+  overflow-y: scroll;
 
   @include mixins.tablet-up {
     height: calc(100vh - variables.$footer-height - variables.$header-height);

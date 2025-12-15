@@ -1,18 +1,15 @@
 "use client";
 import { SearchBar } from "@components/SearchBar";
-import { FacilitiesProvider } from "@components/Context";
+import { useFacilities } from "@components/Context";
 import styles from "./page.module.scss";
+import { SearchResults } from "@/components/SearchResults";
 
 export default function Home() {
-  const onSearch = (searchText: string) => {
-    console.info("TEST! ", searchText);
-  };
+  const { searchName, searchStreetName, facilities, isSearchLoading } = useFacilities();
   return (
     <main className={styles.pageContainer}>
-      test
-      <FacilitiesProvider>
-        <SearchBar onSearch={onSearch} />
-      </FacilitiesProvider>
+      <SearchBar onSearch={searchName} />
+      <SearchResults facilities={facilities} isLoading={isSearchLoading} />
     </main>
   );
 }

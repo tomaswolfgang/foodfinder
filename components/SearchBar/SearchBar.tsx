@@ -3,13 +3,12 @@ import { FoodFacility } from "@/types/FoodFacilityTypes";
 import { ChangeEvent, ChangeEventHandler, useCallback, useEffect, useState } from "react";
 
 type SearchBarProps = {
-  facilities?: FoodFacility[];
   onSearch: (searchText: string) => void;
 };
 
-const DEBOUNCE_TIME_MS = 2000;
+const DEBOUNCE_TIME_MS = 1000;
 
-export const SearchBar = ({ facilities, onSearch }: SearchBarProps) => {
+export const SearchBar = ({ onSearch }: SearchBarProps) => {
   const [searchText, setSearchText] = useState("");
 
   const onSearchTextUpdate = useCallback((e: ChangeEvent<HTMLInputElement>) => {

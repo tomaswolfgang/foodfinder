@@ -6,7 +6,8 @@
 
 ## packages used
 
-- csv-parser
+- csv-parser - parse csv
+- react-query - request caching
 
 ## Notes
 
