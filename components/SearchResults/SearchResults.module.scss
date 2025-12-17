@@ -1,0 +1,16 @@
+@use "@styles/global";
+@use "@styles/variables";
+@use "@styles/mixins";
+
+.searchResult {
+  background-color: variables.$color-background;
+  border: variables.$border;
+  padding: variables.$padding;
+  margin: 0.5rem;
+  box-sizing: border-box;
+  border-radius: 1rem;
+  width: fit-content;
+  display: inline-block;
+
+  @extend .interactable;
+}

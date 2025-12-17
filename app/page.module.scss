@@ -15,3 +15,8 @@
     max-height: calc(100vh - variables.$footer-height - variables.$header-height);
   }
 }
+
+.stickyContent {
+  position: sticky;
+  top: 0;
+}

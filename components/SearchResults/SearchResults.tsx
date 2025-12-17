@@ -1,6 +1,7 @@
 "use client";
 
 import { FoodFacility } from "@/types/FoodFacilityTypes";
+import styles from "./SearchResults.module.scss";
 
 type SearchResultsProps = {
   facilities: readonly FoodFacility[];
@@ -13,7 +14,7 @@ export const SearchResults = ({ facilities, isLoading }: SearchResultsProps) => 
   ) : (
     <div>
       {facilities.map((f) => (
-        <div>
+        <div className={styles.searchResult}>
           {f.name} -- {f.streetNumber} {f.streetName} -- {f.status}
         </div>
       ))}

@@ -2,9 +2,10 @@
 $color-primary: #428dff;
 $color-secondary: #c6d8fb;
 $color-background: #fff;
-$color-background-2: #d9d9d9;
+$color-background-2: #eeeeee;
 $color-focus: #f1f1f1;
 $color-border: #e3e3e3;
+$color-border-emphasis: #b3b3b3;
 
 $color-text-primary: #000001;
 $color-text-secondary: #515151;
@@ -16,11 +17,13 @@ $media-desktop: 912px;
 
 // ----- spacing, position, and depth -----
 $padding: 1rem;
+$padding-mobile: 0.5rem;
 
 // ------ misc ------
 $transition-time: 0.2s;
 $border-radius: 5px;
 $border: solid 1px $color-border;
+$border-emphasis: solid 2px $color-border-emphasis;
 
 $header-height: 100px;
 $mobile-header-height: 80px;

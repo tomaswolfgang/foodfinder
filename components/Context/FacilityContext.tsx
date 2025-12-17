@@ -1,15 +1,20 @@
 "use client";
 
 import { FoodFacility } from "@/types/FoodFacilityTypes";
-import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
-import React, { createContext, ReactNode, useCallback, useContext, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { getFacilities, getNearbyFacilities, Location } from "./queries";
 
 type FacilityProviderData = {
   facilities: readonly FoodFacility[];
+  nearbyFacilities: readonly FoodFacility[];
   isSearchLoading: boolean;
-  search: (facility: FoodFacility) => void;
+  setIsSearchLoading: (loading: boolean) => void;
+  isNearbyQueryLoading: boolean;
+  search: (facility: Partial<FoodFacility>) => void;
   searchName: (name: string) => void;
   searchStreetName: (name: string) => void;
+  searchLocation: (location: Location) => void;
 };
 
 const FacilitiesContext = createContext<FacilityProviderData | null>(null);
@@ -18,34 +23,27 @@ type FacilityProviderProps = {
   children?: React.ReactNode;
 };
 
-const BASE_URL = "http://localhost:3000";
-
-const getFacilities = async (foodFacility: Partial<FoodFacility>) => {
-  const url = new URL("/api/search", BASE_URL);
-
-  Object.entries(foodFacility).forEach(([key, value]) => {
-    url.searchParams.set(key, String(value));
-  });
-
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to load entity connections (${response.status})`);
-  }
-
-  const data = await response.json();
-  return data as readonly FoodFacility[];
-};
-
 export function FacilitiesProvider({ children }: FacilityProviderProps) {
   const [searchCriteria, setSearchCriteria] = useState<Partial<FoodFacility>>({});
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
+  const [location, setLocation] = useState<Location>({ longitude: "", latitude: "" });
 
   const searchKey = useMemo(() => {
     return ["SEARCH", ...Object.entries(searchCriteria).map(([key, value]) => `${key}=${value}`)];
   }, [searchCriteria]);
 
-  const { data: facilities, isLoading: isSearchLoading } = useQuery({
+  const locationSearchKey = useMemo(() => {
+    return ["NEARBY_SEARCH", ...Object.entries(location).map(([key, value]) => `${key}=${value}`)];
+  }, [searchCriteria]);
+
+  const { data: facilities, isLoading: isSearchQueryLoading } = useQuery({
     queryKey: searchKey,
     queryFn: async () => getFacilities(searchCriteria),
+  });
+
+  const { data: nearbyFacilities, isLoading: isNearbyQueryLoading } = useQuery({
+    queryKey: locationSearchKey,
+    queryFn: async () => getNearbyFacilities(location),
   });
 
   const searchName = useCallback((name: string) => {
@@ -56,14 +54,22 @@ export function FacilitiesProvider({ children }: FacilityProviderProps) {
     setSearchCriteria({ streetName });
   }, []);
 
+  const searchLocation = useCallback((location: Location) => {
+    setLocation(location);
+  }, []);
+
   return (
     <FacilitiesContext.Provider
       value={{
         facilities: facilities ?? [],
-        isSearchLoading,
+        nearbyFacilities: nearbyFacilities ?? [],
+        isSearchLoading: isSearchLoading || isSearchQueryLoading,
+        setIsSearchLoading,
+        isNearbyQueryLoading,
         search: setSearchCriteria,
         searchName,
         searchStreetName,
+        searchLocation,
       }}
     >
       {children}

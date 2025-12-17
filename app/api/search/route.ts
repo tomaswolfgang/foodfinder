@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
   let filteredFacilities = allFacilities;
   for (const [name, value] of request.nextUrl.searchParams) {
-    filteredFacilities = searchBy(allFacilities, name as keyof FoodFacility, value);
+    filteredFacilities = searchBy(filteredFacilities, name as keyof FoodFacility, value);
   }
   return Response.json(filteredFacilities);
 }
