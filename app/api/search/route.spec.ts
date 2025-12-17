@@ -1,9 +1,7 @@
 /**
  * @jest-environment node
  */
-import { NextRequest } from "next/server";
 import { GET } from "./route";
-import { loadAllData } from "../db";
 import { FacilityType, FoodFacility, Status } from "@/types";
 
 const mockFacilities: readonly FoodFacility[] = [
