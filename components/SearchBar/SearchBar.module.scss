@@ -36,6 +36,7 @@
   border: variables.$border-emphasis;
   font-size: 0.75rem;
   border-right: none;
+  cursor: pointer;
 
   @include mixins.tablet-up {
     width: 70%;
@@ -51,6 +52,7 @@
   box-sizing: border-box;
   border: variables.$border-emphasis;
   font-size: 0.6rem;
+  cursor: pointer;
   @include mixins.tablet-up {
     width: 30%;
     font-size: 1rem;
@@ -81,4 +83,5 @@
   box-sizing: border-box;
   border: variables.$border-emphasis;
   font-size: 0.6rem;
+  cursor: pointer;
 }

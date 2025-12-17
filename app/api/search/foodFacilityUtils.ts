@@ -1,4 +1,4 @@
-import { FacilityType, FoodFacility, Status } from "../../../types/FoodFacilityTypes";
+import { FacilityType, FoodFacility, Status } from "@/types";
 
 export const searchBy = (
   facilities: readonly FoodFacility[],

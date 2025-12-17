@@ -1,6 +1,6 @@
 "use client";
 
-import { FoodFacility } from "@/types/FoodFacilityTypes";
+import { FoodFacility } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { getFacilities, getNearbyFacilities, Location } from "./queries";

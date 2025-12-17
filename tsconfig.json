@@ -22,8 +22,7 @@
       "@/*": ["./*"],
       "@assets/*": ["./assets/*"],
       "@components/*": ["./components/*"],
-      "@styles/*": ["./styles/*"],
-      "@types/*": ["./types/*"]
+      "@styles/*": ["./styles/*"]
     }
   },
   "include": [

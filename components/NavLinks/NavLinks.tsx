@@ -17,7 +17,6 @@ export const NavLinks = ({ links }: NavLinksProps) => {
   const toggleSideNav = useCallback(
     (e: React.MouseEvent<HTMLButtonElement | Element, MouseEvent>) => {
       e.stopPropagation();
-      console.info("set side nav");
       setSideNavActive((prevState) => !prevState);
     },
     []

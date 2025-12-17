@@ -11,6 +11,7 @@
   border-radius: 1rem;
   width: fit-content;
   display: inline-block;
+  word-wrap: break-word;
 
   @extend .interactable;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { FoodFacility } from "@/types/FoodFacilityTypes";
+import { FoodFacility } from "@/types";
 import styles from "./SearchResults.module.scss";
 
 type SearchResultsProps = {

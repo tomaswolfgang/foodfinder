@@ -1,4 +1,4 @@
-import { FoodFacility } from "@/types/FoodFacilityTypes";
+import { FoodFacility } from "@/types";
 
 export type Location = {
   longitude: string;

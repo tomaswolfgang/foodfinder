@@ -1,6 +1,6 @@
 "use client";
-import { FoodFacility, Status } from "@/types/FoodFacilityTypes";
-import { ChangeEvent, ChangeEventHandler, useCallback, useEffect, useMemo, useState } from "react";
+import { FoodFacility, Status } from "@/types";
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./SearchBar.module.scss";
 
 type SearchBarProps = {
