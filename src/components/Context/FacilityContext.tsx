@@ -1,6 +1,6 @@
 "use client";
 
-import { FoodFacility, Location } from "@/types";
+import { FoodFacility, FoodFacilityResponse, Location } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { getFacilities, getNearbyFacilities } from "./queries";
@@ -24,7 +24,7 @@ type FacilityProviderProps = {
 };
 
 export function FacilitiesProvider({ children }: FacilityProviderProps) {
-  const [searchCriteria, setSearchCriteria] = useState<Partial<FoodFacility>>({});
+  const [searchCriteria, setSearchCriteria] = useState<Partial<FoodFacilityResponse>>({});
   const [location, setLocation] = useState<Location>({ longitude: "", latitude: "" });
 
   const searchKey = useMemo(() => {

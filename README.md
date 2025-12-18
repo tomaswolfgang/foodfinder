@@ -1,14 +1,22 @@
-## IMPORTANT NOTE
-
-**Please add the absolute path to the csv in the `.env` file.**
-
-Something was odd about setting up my path to the csv using \_\_dirname and I ended up needing to use an absolute path
-
-## Second important note:
+## Thank you
 
 I appreciate you taking the time to review my work!
 
-## Choices
+---
+
+# Problem - Solution
+
+## Problem
+
+Customers are trying to find Mobile Food Facilities around SF
+
+## Solution
+
+An application that allows them to search for various food facilities using various filters such as: name, street name, and status (whether the mobile food facility is has an active permit)
+
+---
+
+## Technical Decisions
 
 ### Why NextJs?
 
@@ -27,6 +35,10 @@ I wanted to have the db file (which reads the csv) act like a database to simula
 
 Why filter in the ReadStream? This is a scalability choice. Obviously it's a bit overkill for a csv with only ~400 lines BUT IF we had to parse through a much larger csv, it would be extremely memory intensive to load all those lines into a variable and then filter through.
 Checking for valid values as we iterate through the lines of the csv minimizes both the memory footprint (only loading in what you need to into memory) and the computational footprint (filtering as you take in each csv line).
+
+### Request Validation
+
+To ensure the data contract between the client and server is as tight as possible. We add restrictive types and query construction on the front-end, along with a secondary server validation layer that checks that parameter keys are valid and enum values are exact.
 
 ### Error handling
 
@@ -55,7 +67,7 @@ My main target was ensuring the design was at least responsive.
 
 I tried to keep styling relatively consistent via variables, extensions and mixins.
 
-## packages used
+### packages used
 
 - csv-parser - converting csv to a json structure
 - react-query - request caching
@@ -64,3 +76,42 @@ I tried to keep styling relatively consistent via variables, extensions and mixi
 - classnames - cleaner conditional classes
 - bignumber - Arithmetic using large decimals (i.e. coordinates to calc distance)
 - sass - css is definitely almost fully caught up functionally, but I'm still more familiar with sass so this was a comfort choice
+
+---
+
+## Critiques
+
+### If I had more time...
+
+My original vision was having a map interface that pins displayed all the food facilities according to their coordinates.
+Filtering would've filtered the pins down to the relevant list of facilities. I was also planning on filtering on more than just name, street name and status.
+Hovering over pins would show a tooltip with the facility information (like facility type, etc.)
+
+### tradeoffs
+
+- I made a point about using context above and risk of having a god context as well as the coupling it enforces on components that use it.
+- I made server responses extremely restrictive in the information provided. This was a plus in terms of minimizing response payload and only sending what the UI needs, but for a more fleshed out UI, this would probably need to be expanded on adding more overhead to future development.
+- Custom errors is more development overhead for added security
+
+### Left out
+
+### problems with scale
+
+---
+
+## steps to run
+
+**Please add the absolute path to the csv in the `.env` file.**
+
+Something was odd about setting up my path to the csv using \_\_dirname and I ended up needing to use an absolute path
+
+### Running the project locally
+
+1. run `pnpm i`
+2. run `pnpm dev`
+3. open your browser to `http://localhost:3000`
+
+### Testing
+
+1. run `pnpm i`
+2. run `pnpm test`

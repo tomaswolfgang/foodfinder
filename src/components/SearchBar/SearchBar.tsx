@@ -1,5 +1,5 @@
 "use client";
-import { FoodFacility, Status } from "@/types";
+import { FoodFacility, FoodFacilityResponse, Status } from "@/types";
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./SearchBar.module.scss";
 
@@ -33,7 +33,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
   }, []);
 
   const searchCriteria = useMemo(() => {
-    const critera: Partial<FoodFacility> = {};
+    const critera: Partial<FoodFacilityResponse> = {};
 
     if (searchType === SEARCH_TYPES.NAME) {
       critera.name = searchText;
