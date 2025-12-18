@@ -2,20 +2,26 @@
  * @jest-environment node
  */
 import { GET } from "./route";
-import { loadAllData } from "../db";
-import { searchBy } from "./foodFacilityUtils";
-import { CustomError, ERROR_CODES, toErrorMessage } from "@/app/ErrorCodes";
+import { loadFilteredData } from "../db";
+import { validateFoodFacilityQuery } from "./foodFacilityUtils";
+import { CustomError, ERROR_CODES, toErrorMessage } from "../ErrorCodes";
 
 const SHOW_LOGS = false;
 
 const mockData = [{ test: "test" }];
 
 jest.mock("../db", () => ({
-  loadAllData: jest.fn(() => mockData),
+  loadFilteredData: jest.fn(() => []),
 }));
 
 jest.mock("./foodFacilityUtils", () => ({
-  searchBy: jest.fn(() => mockData),
+  validateFoodFacilityQuery: jest.fn((p: URLSearchParams) => {
+    const obj: any = {};
+    for (const [name, value] of p) {
+      obj[name] = value;
+    }
+    return obj;
+  }),
 }));
 
 jest.mock("../transformers", () => ({
@@ -25,7 +31,7 @@ jest.mock("../transformers", () => ({
 describe("GET /api/search", () => {
   //console override to reduce logs
   console.error = SHOW_LOGS ? console.error : jest.fn();
-  it("SHOULD search by every key value pair WHEN called", async () => {
+  it("SHOULD call loadFilteredData WHEN query is fully validated", async () => {
     const mockParamObject = {
       id: "mockId1",
       name: "mockName1",
@@ -47,15 +53,8 @@ describe("GET /api/search", () => {
     // Call the handler function directly
     const response = await GET(mockRequest);
 
-    expect(searchBy).toHaveBeenCalledTimes(Object.keys(mockParamObject).length);
-    Object.keys(mockParamObject).forEach((key) => {
-      expect(searchBy).toHaveBeenCalledWith(
-        mockData,
-        key,
-        mockParamObject[key as keyof typeof mockParamObject]
-      );
-    });
-
+    expect(loadFilteredData).toHaveBeenCalledTimes(1);
+    expect(loadFilteredData).toHaveBeenCalledWith(mockParamObject);
     expect(response.status).toBe(200);
   });
 
@@ -69,7 +68,7 @@ describe("GET /api/search", () => {
         searchParams: new URLSearchParams(mockParamObject),
       },
     };
-    (searchBy as jest.Mock).mockImplementationOnce(() => {
+    (validateFoodFacilityQuery as jest.Mock).mockImplementationOnce(() => {
       throw new CustomError("INVALID_SEARCH_ENUM");
     });
     // Call the handler function directly
@@ -90,7 +89,7 @@ describe("GET /api/search", () => {
         searchParams: new URLSearchParams(mockParamObject),
       },
     };
-    (loadAllData as jest.Mock).mockImplementationOnce(() => {
+    (validateFoodFacilityQuery as jest.Mock).mockImplementationOnce(() => {
       throw Error("random error");
     });
     // Call the handler function directly

@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { ERROR_CODES, toErrorMessage } from "@/app/ErrorCodes";
+import { ERROR_CODES, toErrorMessage } from "../ErrorCodes";
 import { GET } from "./route";
 import { getClosestFacilities } from "../db";
 

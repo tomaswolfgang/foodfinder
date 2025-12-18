@@ -24,6 +24,39 @@ export const loadAllData = () =>
       });
   });
 
+export const facilityCompare = (
+  foodFacility: FoodFacility,
+  criteria: Partial<FoodFacility>
+): boolean => {
+  return Object.entries(criteria).every(([key, value]) => {
+    // Lets make searching case insensitive
+    return foodFacility[key as keyof FoodFacility]
+      ?.toString()
+      .toUpperCase()
+      .includes(value.toString().toUpperCase());
+  });
+};
+
+export const loadFilteredData = (foodFacilityCriteria: Partial<FoodFacility>) =>
+  new Promise<readonly FoodFacility[]>((resolve, reject) => {
+    const results: FoodFacility[] = [];
+
+    createReadStream(DATASTORE_FILE)
+      .pipe(csv())
+      .on("data", (data: FoodFacilityCSV) => {
+        const foodFacility = prettifyCsvData(data);
+        if (facilityCompare(foodFacility, foodFacilityCriteria)) {
+          results.push(foodFacility);
+        }
+      })
+      .on("end", () => {
+        resolve(results as readonly FoodFacility[]);
+      })
+      .on("error", (err) => {
+        reject(err);
+      });
+  });
+
 export type FoodFacilityWithDistance = FoodFacility & { absoluteDistance: BigNumber };
 
 export const calculateNearestFacilities = (

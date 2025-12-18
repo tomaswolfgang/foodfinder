@@ -39,7 +39,6 @@ export function FacilitiesProvider({ children }: FacilityProviderProps) {
     return !!location.latitude && !!location.longitude;
   }, [location]);
 
-  console.info("searchKey", searchKey);
   const { data: facilities, isLoading: isSearchQueryLoading } = useQuery({
     queryKey: searchKey,
     queryFn: async () => getFacilities(searchCriteria),

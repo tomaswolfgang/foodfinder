@@ -1,13 +1,16 @@
 import { Readable } from "node:stream";
 import {
   calculateNearestFacilities,
+  facilityCompare,
   FoodFacilityWithDistance,
   getClosestFacilities,
   loadAllData,
+  loadFilteredData,
 } from "./db";
 import { createReadStream } from "node:fs";
 import { prettifyCsvData } from "./transformers";
 import BigNumber from "bignumber.js";
+import { FoodFacility } from "@/types";
 
 jest.mock("node:fs", () => ({
   createReadStream: jest.fn(),
@@ -49,6 +52,70 @@ describe("db or at least this pseudo db", () => {
 
     it("SHOULD reject WHEN stream emits an error", async () => {
       // TODO: I'm having trouble mocking a readstream error
+    });
+  });
+
+  describe("facilityCompare", () => {
+    it("SHOULD compare every criteria to a FoodFacility WHEN called", () => {
+      const mockFoodFacility = {
+        id: "mockId",
+        name: "mockName",
+        streetName: "mockStreet1",
+        status: "mockStatus",
+      } as unknown as FoodFacility;
+
+      const mockFoodFacility2 = {
+        id: "mockId",
+        name: "otherName",
+        streetName: "otherStreet",
+        status: "mockStatus",
+      } as unknown as FoodFacility;
+
+      const criteria: Partial<FoodFacility> = {
+        name: "MocKN", // should be case insensitive and include partial values
+      };
+
+      const criteria2: Partial<FoodFacility> = {
+        name: "oTHER",
+        streetName: "oThErStReet",
+      };
+
+      expect(facilityCompare(mockFoodFacility, criteria)).toBe(true);
+      expect(facilityCompare(mockFoodFacility2, criteria)).toBe(false);
+      expect(facilityCompare(mockFoodFacility2, criteria2)).toBe(true);
+    });
+  });
+
+  describe("loadFilteredData", () => {
+    it("SHOULD filter data as it is read and respond with full filtered data WHEN called", async () => {
+      const criteria: Partial<FoodFacility> = {
+        name: "tom",
+      };
+      let i = 0;
+      const rows = ["id,name\n", "1,tommy\n", "2,timmy\n", "3,tommothy\n"];
+      const mockEventStream = new Readable({
+        objectMode: true,
+        read: function (size) {
+          if (i < rows.length) {
+            const buf = Buffer.from(rows[i], "ascii");
+            const chunk = this.push(buf);
+            i++;
+            return chunk;
+          } else {
+            return this.push(null);
+          }
+        },
+      });
+
+      (createReadStream as jest.Mock).mockImplementationOnce(() => mockEventStream);
+
+      const data = await loadFilteredData(criteria);
+
+      expect(prettifyCsvData).toHaveBeenCalledTimes(rows.length - 1);
+      expect(data).toEqual([
+        { id: "1", name: "tommy" },
+        { id: "3", name: "tommothy" },
+      ]);
     });
   });
 

@@ -1,4 +1,4 @@
-import { CustomError } from "@/app/ErrorCodes";
+import { CustomError } from "../ErrorCodes";
 import { FacilityType, FoodFacility, Status } from "@/types";
 
 export const searchBy = (
@@ -33,4 +33,37 @@ export const searchBy = (
     default:
       throw new CustomError("NON_EXISTENT_SEARCH_PROPERTIES");
   }
+};
+
+export const validateFoodFacilityQuery = (queryParams: URLSearchParams): Partial<FoodFacility> => {
+  const facilityQuery: Partial<FoodFacility> = {};
+  for (const [name, value] of queryParams) {
+    switch (name) {
+      case "id":
+      case "name":
+      case "streetName":
+      case "foodItems":
+      case "permit":
+        // only add query keys that have values
+        if (value) facilityQuery[name] = value;
+        continue;
+      case "facilityType":
+        // strict equality for enums
+        if (value in FacilityType) {
+          facilityQuery[name] = value as FacilityType;
+          continue;
+        }
+        throw new CustomError("INVALID_SEARCH_ENUM");
+      case "status":
+        // strict equality for enums
+        if (value in Status) {
+          facilityQuery[name] = value as Status;
+          continue;
+        }
+        throw new CustomError("INVALID_SEARCH_ENUM");
+      default:
+        throw new CustomError("NON_EXISTENT_SEARCH_PROPERTIES");
+    }
+  }
+  return facilityQuery;
 };

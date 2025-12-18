@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { getClosestFacilities } from "../db";
-import { CustomError, ERROR_CODES, toErrorMessage } from "@/app/ErrorCodes";
+import { CustomError, ERROR_CODES, toErrorMessage } from "../ErrorCodes";
 import { toFoodFacilityResponse } from "../transformers";
 
 export async function GET(request: NextRequest) {
