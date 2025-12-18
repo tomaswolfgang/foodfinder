@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 import { loadFilteredData } from "../db";
-import { searchBy, validateFoodFacilityQuery } from "./foodFacilityUtils";
-import { FoodFacility } from "@/types";
+import { validateFoodFacilityQuery } from "./foodFacilityUtils";
 import { CustomError, ERROR_CODES, toErrorMessage } from "../ErrorCodes";
 import { toFoodFacilityResponse } from "../transformers";
 

@@ -1,10 +1,4 @@
-import { FoodFacility } from "@/types";
-
-export type Location = {
-  longitude: string;
-  latitude: string;
-  allowAll?: boolean;
-};
+import { FoodFacility, Location } from "@/types";
 
 const BASE_URL = "http://localhost:3000";
 

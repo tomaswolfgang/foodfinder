@@ -1,9 +1,9 @@
 "use client";
 
-import { FoodFacility } from "@/types";
+import { FoodFacility, Location } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
-import { getFacilities, getNearbyFacilities, Location } from "./queries";
+import { getFacilities, getNearbyFacilities } from "./queries";
 
 type FacilityProviderData = {
   facilities: readonly FoodFacility[];

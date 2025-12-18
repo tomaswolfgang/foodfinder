@@ -4,25 +4,10 @@ import { type FoodFacility, type FoodFacilityCSV, Status } from "@/types";
 import BigNumber from "bignumber.js";
 import { prettifyCsvData } from "./transformers";
 
-export const DATASTORE_FILE =
-  "/Users/thomaswong/Documents/projects/learning/interviewTrials/Rad AI/radai-take-home/app/api/data.csv";
-
 const NEAREST_LIMIT = 5;
+const PATH_TO_CSV = process.env.PATH_TO_CSV;
 
-export const loadAllData = () =>
-  new Promise<readonly FoodFacility[]>((resolve, reject) => {
-    const results: FoodFacility[] = [];
-
-    createReadStream(DATASTORE_FILE)
-      .pipe(csv())
-      .on("data", (data: FoodFacilityCSV) => results.push(prettifyCsvData(data)))
-      .on("end", () => {
-        resolve(results as readonly FoodFacility[]);
-      })
-      .on("error", (err) => {
-        reject(err);
-      });
-  });
+if (!PATH_TO_CSV) throw Error("Please set the PATH_TO_CSV in your .env");
 
 export const facilityCompare = (
   foodFacility: FoodFacility,
@@ -41,7 +26,7 @@ export const loadFilteredData = (foodFacilityCriteria: Partial<FoodFacility>) =>
   new Promise<readonly FoodFacility[]>((resolve, reject) => {
     const results: FoodFacility[] = [];
 
-    createReadStream(DATASTORE_FILE)
+    createReadStream(PATH_TO_CSV)
       .pipe(csv())
       .on("data", (data: FoodFacilityCSV) => {
         const foodFacility = prettifyCsvData(data);
@@ -90,7 +75,7 @@ export const getClosestFacilities = (longitude: number, latitude: number, allowA
   new Promise<readonly FoodFacility[]>((resolve, reject) => {
     let results: FoodFacilityWithDistance[] = [];
 
-    createReadStream(DATASTORE_FILE)
+    createReadStream(PATH_TO_CSV)
       .pipe(csv())
       .on("data", (data: FoodFacilityCSV) => {
         const foodFacility = prettifyCsvData(data);
@@ -108,6 +93,25 @@ export const getClosestFacilities = (longitude: number, latitude: number, allowA
         };
         results = calculateNearestFacilities(results, foodFacilityWithDistance);
       })
+      .on("end", () => {
+        resolve(results as readonly FoodFacility[]);
+      })
+      .on("error", (err) => {
+        reject(err);
+      });
+  });
+
+/**
+ * DEPRECATED - This was my old v1 implementation before I found the light in loadFilteredData
+ * @returns All data from the csv in a JSON format
+ */
+export const loadAllData = () =>
+  new Promise<readonly FoodFacility[]>((resolve, reject) => {
+    const results: FoodFacility[] = [];
+
+    createReadStream(PATH_TO_CSV)
+      .pipe(csv())
+      .on("data", (data: FoodFacilityCSV) => results.push(prettifyCsvData(data)))
       .on("end", () => {
         resolve(results as readonly FoodFacility[]);
       })

@@ -1,7 +1,7 @@
 "use client";
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./LocationBar.module.scss";
-import { Location } from "../Context/queries";
+import { Location } from "@/types";
 
 type SearchBarProps = {
   onSearch: (facility: Location) => void;
