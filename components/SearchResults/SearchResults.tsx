@@ -15,11 +15,16 @@ export const SearchResults = ({ facilities, isLoading }: SearchResultsProps) => 
   ) : (
     <div>
       {facilities.length ? (
-        facilities.map((f) => (
-          <div className={styles.searchResult}>
-            {f.name} -- {f.streetNumber} {f.streetName} -- {f.status}
-          </div>
-        ))
+        facilities.map((f) => {
+          const facilityInfo = `${f.name} (${f.id}) -- ${f.streetNumber ?? ""} ${
+            f.streetName ?? ""
+          } -- ${f.status}`;
+          return (
+            <div className={styles.searchResult} key={f.id}>
+              {facilityInfo}
+            </div>
+          );
+        })
       ) : (
         // TODO: Make this empty state prettier
         <div>No results found</div>

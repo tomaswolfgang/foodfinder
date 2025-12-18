@@ -141,7 +141,7 @@ describe("db or at least this pseudo db", () => {
   });
 
   describe("getClosestFacilities", () => {
-    it("SHOULD calculate distance AND return closest WHEN called", async () => {
+    it("SHOULD calculate distance AND return closest any status facility WHEN called with allowAll=true", async () => {
       (prettifyCsvData as jest.Mock).mockImplementation(({ longitude, latitude }) => ({
         longitude: Number(longitude),
         latitude: Number(latitude),
@@ -173,6 +173,47 @@ describe("db or at least this pseudo db", () => {
         { longitude: 3, latitude: 3, absoluteDistance: expect.any(BigNumber) },
         { longitude: 3, latitude: 3, absoluteDistance: expect.any(BigNumber) },
         { longitude: 4, latitude: 4, absoluteDistance: expect.any(BigNumber) },
+      ]);
+    });
+
+    it("SHOULD calculate distance AND return closest approved facility WHEN called without allowAll", async () => {
+      (prettifyCsvData as jest.Mock).mockImplementation(({ longitude, latitude, status }) => ({
+        longitude: Number(longitude),
+        latitude: Number(latitude),
+        status,
+      }));
+      let i = 0;
+      const rows = [
+        "longitude,latitude,status\n",
+        "1,1,EXPIRED\n",
+        "3,3,APPROVED\n",
+        "3,3,REQUESTED\n",
+        "3,3,REQUESTED\n",
+        "4,4,REQUESTED\n",
+        "4,4,REQUESTED\n",
+      ];
+      const mockEventStream = new Readable({
+        objectMode: true,
+        read: function (size) {
+          if (i < rows.length) {
+            const buf = Buffer.from(rows[i], "ascii");
+            const chunk = this.push(buf);
+            i++;
+            return chunk;
+          } else {
+            return this.push(null);
+          }
+        },
+      });
+
+      (createReadStream as jest.Mock).mockImplementationOnce(() => mockEventStream);
+
+      //WILL FILTER OUT ANY NON APPROVED FACILITIES
+      const data = await getClosestFacilities(2, 2);
+
+      expect(prettifyCsvData).toHaveBeenCalledTimes(rows.length - 1);
+      expect(data).toEqual([
+        { longitude: 3, latitude: 3, status: "APPROVED", absoluteDistance: expect.any(BigNumber) },
       ]);
     });
     it("SHOULD reject WHEN stream emits an error", async () => {

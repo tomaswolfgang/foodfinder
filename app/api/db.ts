@@ -61,7 +61,7 @@ export const getClosestFacilities = (longitude: number, latitude: number, allowA
       .pipe(csv())
       .on("data", (data: FoodFacilityCSV) => {
         const foodFacility = prettifyCsvData(data);
-        if (!allowAll && foodFacility.status !== Status.APPROVED) return;
+        if (foodFacility.status !== Status.APPROVED && !allowAll) return;
 
         // TECHNICALLY we should use Harversine distance formula to calculate true proximity using longitude and latitude
         // but for simplicity I'm sticking with good ole pythagoras

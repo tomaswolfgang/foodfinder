@@ -33,6 +33,14 @@ export type FoodFacility = {
   permit: string;
 };
 
+export type FoodFacilityResponse = {
+  id: string;
+  name: string;
+  streetName?: string;
+  streetNumber?: number;
+  status: Status;
+};
+
 export type FoodFacilityCSV = {
   locationid: string;
   Applicant: string;

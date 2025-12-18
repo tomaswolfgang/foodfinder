@@ -1,24 +1,24 @@
 import { FacilityType, FoodFacility, FoodFacilityCSV, Status } from "@/types";
-import * as Transformers from "./transformers";
+import { parseAddress, prettifyCsvData, toFoodFacilityResponse } from "./transformers";
 
 describe("transformers", () => {
   describe("parseAddress", () => {
     it("SHOULD return undefined WHEN address is falsey", () => {
-      expect(Transformers.parseAddress("")).toBeUndefined();
-      expect(Transformers.parseAddress(null as any)).toBeUndefined();
-      expect(Transformers.parseAddress(undefined as any)).toBeUndefined();
+      expect(parseAddress("")).toBeUndefined();
+      expect(parseAddress(null as any)).toBeUndefined();
+      expect(parseAddress(undefined as any)).toBeUndefined();
     });
 
     it("SHOULD handle address WHEN address is an assessors block", () => {
       const streetName = "ASSESSORS test";
-      expect(Transformers.parseAddress(streetName)).toEqual({
+      expect(parseAddress(streetName)).toEqual({
         streetName,
       });
     });
 
     it("SHOULD handle address WHEN address a number and street combo", () => {
       const streetName = "123 Geary ave";
-      expect(Transformers.parseAddress(streetName)).toEqual({
+      expect(parseAddress(streetName)).toEqual({
         streetNumber: 123,
         streetName: "Geary ave",
       });
@@ -27,7 +27,7 @@ describe("transformers", () => {
 
   describe("prettifyCsvData", () => {
     it("SHOULD throw an error WHEN status type mapping doesnt map to anything -- aka I forgot to include a potential status value", () => {
-      expect(() => Transformers.prettifyCsvData({ Status: "hjahaa" } as any)).toThrow();
+      expect(() => prettifyCsvData({ Status: "hjahaa" } as any)).toThrow();
     });
 
     it("SHOULD map the csv row to a prettier structure WHEN called", () => {
@@ -55,7 +55,7 @@ describe("transformers", () => {
         streetNumber: 1,
       };
 
-      expect(Transformers.prettifyCsvData(initial)).toEqual(expected);
+      expect(prettifyCsvData(initial)).toEqual(expected);
 
       const initial2: FoodFacilityCSV = {
         locationid: "mockLocationId",
@@ -80,7 +80,23 @@ describe("transformers", () => {
         facilityType: FacilityType.PUSH_CART,
       };
 
-      expect(Transformers.prettifyCsvData(initial2)).toEqual(expected2);
+      expect(prettifyCsvData(initial2)).toEqual(expected2);
+    });
+  });
+  describe("toFoodFacilityResponse", () => {
+    it("SHOULD convert food facility to object with only response fields WHEN called", () => {
+      const test: any = {
+        id: "mockId",
+        name: "mockName",
+        status: "REJECTED",
+        someOtherField: "hahaha lol",
+      };
+
+      expect(toFoodFacilityResponse(test)).toEqual({
+        id: "mockId",
+        name: "mockName",
+        status: "REJECTED",
+      });
     });
   });
 });

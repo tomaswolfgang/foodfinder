@@ -1,4 +1,11 @@
-import { Address, FacilityType, FoodFacility, FoodFacilityCSV, Status } from "@/types";
+import {
+  Address,
+  FacilityType,
+  FoodFacility,
+  FoodFacilityCSV,
+  FoodFacilityResponse,
+  Status,
+} from "@/types";
 
 const ASSESSORS_ADDRESS_BEGINNING = "ASSESSORS";
 
@@ -56,3 +63,11 @@ export const prettifyCsvData = (csvRow: FoodFacilityCSV): FoodFacility => {
       : {}),
   };
 };
+
+export const toFoodFacilityResponse = (facility: FoodFacility): FoodFacilityResponse => ({
+  id: facility.id,
+  name: facility.name,
+  streetNumber: facility.streetNumber,
+  streetName: facility.streetName,
+  status: facility.status,
+});

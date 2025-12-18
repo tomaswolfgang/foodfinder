@@ -65,23 +65,23 @@
   box-sizing: border-box;
   gap: 0.5rem;
   align-items: center;
-  font-size: 0.5rem;
+  font-size: 0.75rem;
 
   border-radius: 2rem;
   padding: variables.$padding-mobile;
   background-color: variables.$color-background;
   border: variables.$border;
   @include mixins.tablet-up {
-    font-size: 0.75rem;
+    font-size: 1rem;
     padding: variables.$padding;
   }
 }
 
 .statusSelector {
   border-radius: 2px;
-  height: 1rem;
+  height: 1.25rem;
   box-sizing: border-box;
   border: variables.$border-emphasis;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   cursor: pointer;
 }

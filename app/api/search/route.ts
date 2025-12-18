@@ -3,6 +3,7 @@ import { loadAllData } from "../db";
 import { searchBy } from "./foodFacilityUtils";
 import { FoodFacility } from "@/types";
 import { CustomError, ERROR_CODES, toErrorMessage } from "@/app/ErrorCodes";
+import { toFoodFacilityResponse } from "../transformers";
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
     for (const [name, value] of request.nextUrl.searchParams) {
       filteredFacilities = searchBy(filteredFacilities, name as keyof FoodFacility, value);
     }
-    return Response.json(filteredFacilities);
+    return Response.json(filteredFacilities.map(toFoodFacilityResponse));
   } catch (err: any) {
     if (err instanceof CustomError) {
       return Response.json({ error: err.message }, { status: err.status });

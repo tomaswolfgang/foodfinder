@@ -1,0 +1,118 @@
+openapi: 3.0.0
+info:
+  title: Facility API
+  version: 1.0.0
+  description: ""
+servers:
+  - url: localhost:3000
+paths:
+  /api/search:
+    get:
+      summary: Search by name
+      parameters:
+        - name: name
+          in: query
+          schema:
+            type: string
+          example: "food"
+        - name: streetName
+          in: query
+          schema:
+            type: string
+          example: "geary"
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: ["APPROVED", "REQUESTED", "ISSUED", "EXPIRED", "SUSPEND"]
+          example: "geary"
+      responses:
+        "200":
+          description: list of facilities matching the search criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Facility"
+        "400":
+          description: User parameter error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/closest:
+    get:
+      summary: Search by location (only approved)
+      parameters:
+        - name: longitude
+          in: query
+          required: true
+          description: longitude to identify nearby facilities with
+          schema:
+            type: integer
+          example: "50"
+        - name: latitude
+          in: query
+          required: true
+          description: latitude to identify nearby facilities with
+          schema:
+            type: integer
+          example: "50"
+        - name: allowAll
+          in: query
+          schema:
+            type: string
+            enum: ["true"]
+          example: "true"
+      responses:
+        "200":
+          description: 5 closest facilites to the specified coordinates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Facility"
+        "400":
+          description: User parameter error i.e. missing coordinate value
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Facility:
+      type: object
+      required: [id, name, status]
+      properties:
+        id:
+          type: string
+          description: location id
+          example: "12345"
+        name:
+          type: string
+          description: applicant name
+          example: Tommy Food Co
+        streetName:
+          type: string
+          description: facility address street name
+          example: Manor Drive
+        streetNumber:
+          type: integer
+          description: facility address street number
+          example: 1
+        status:
+          type: string
+          enum: ["APPROVED", "REQUESTED", "ISSUED", "EXPIRED", "SUSPEND"]
+          description: facility permit status
+          example: "APPROVED"
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          description: obfuscated error code
+          example: "Please contact support with error code: hehehe"

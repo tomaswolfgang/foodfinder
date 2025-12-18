@@ -12,6 +12,10 @@ jest.mock("../db", () => ({
   getClosestFacilities: jest.fn(() => mockFacilities),
 }));
 
+jest.mock("../transformers", () => ({
+  toFoodFacilityResponse: jest.fn((p) => p),
+}));
+
 describe("GET /api/closest", () => {
   //console override to reduce logs
   console.error = SHOW_LOGS ? console.error : jest.fn();

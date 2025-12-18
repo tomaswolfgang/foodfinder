@@ -18,6 +18,10 @@ jest.mock("./foodFacilityUtils", () => ({
   searchBy: jest.fn(() => mockData),
 }));
 
+jest.mock("../transformers", () => ({
+  toFoodFacilityResponse: jest.fn((p) => p),
+}));
+
 describe("GET /api/search", () => {
   //console override to reduce logs
   console.error = SHOW_LOGS ? console.error : jest.fn();

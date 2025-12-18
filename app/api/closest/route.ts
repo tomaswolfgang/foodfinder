@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { getClosestFacilities } from "../db";
 import { CustomError, ERROR_CODES, toErrorMessage } from "@/app/ErrorCodes";
+import { toFoodFacilityResponse } from "../transformers";
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
 
     if (longitude !== null && latitude !== null) {
       const closeFacilities = await getClosestFacilities(longitude, latitude, allowAll);
-      return Response.json(closeFacilities);
+      return Response.json(closeFacilities.map(toFoodFacilityResponse));
     }
     throw new CustomError("INVALID_LOCATION_PAYLOAD");
   } catch (err) {
