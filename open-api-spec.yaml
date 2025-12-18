@@ -41,6 +41,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/closest:
     get:
       summary: Search by location (only approved)
@@ -76,6 +82,12 @@ paths:
                   $ref: "#/components/schemas/Facility"
         "400":
           description: User parameter error i.e. missing coordinate value
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
           content:
             application/json:
               schema:
