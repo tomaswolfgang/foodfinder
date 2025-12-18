@@ -6,15 +6,16 @@ import styles from "./SearchResults.module.scss";
 type SearchResultsProps = {
   facilities: readonly FoodFacility[];
   isLoading: boolean;
+  isEnabled?: boolean;
 };
 
-export const SearchResults = ({ facilities, isLoading }: SearchResultsProps) => {
+export const SearchResults = ({ facilities, isLoading, isEnabled }: SearchResultsProps) => {
   return isLoading ? (
     // TODO: Make the loading state prettier
     <div>Loading...</div>
   ) : (
     <div>
-      {facilities.length ? (
+      {facilities.length || !isEnabled ? (
         facilities.map((f) => {
           const facilityInfo = `${f.name} (${f.id}) -- ${f.streetNumber ?? ""} ${
             f.streetName ?? ""

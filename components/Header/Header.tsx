@@ -8,9 +8,8 @@ import { NavLinks } from "../NavLinks";
 
 const BASE_URL = "/";
 const links: NavLink[] = [
-  { displayName: "Home", url: "/" },
-  { displayName: "About", url: "/" },
-  { displayName: "Careers", url: "/" },
+  { displayName: "Home", url: BASE_URL },
+  { displayName: "Nearby", url: "/nearby" },
 ];
 
 export const Header = () => (

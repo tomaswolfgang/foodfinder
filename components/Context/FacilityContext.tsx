@@ -8,8 +8,8 @@ import { getFacilities, getNearbyFacilities, Location } from "./queries";
 type FacilityProviderData = {
   facilities: readonly FoodFacility[];
   nearbyFacilities: readonly FoodFacility[];
-  isSearchLoading: boolean;
-  setIsSearchLoading: (loading: boolean) => void;
+  isSearchQueryLoading: boolean;
+  locationSearchEnabled: boolean;
   isNearbyQueryLoading: boolean;
   search: (facility: Partial<FoodFacility>) => void;
   searchName: (name: string) => void;
@@ -25,7 +25,6 @@ type FacilityProviderProps = {
 
 export function FacilitiesProvider({ children }: FacilityProviderProps) {
   const [searchCriteria, setSearchCriteria] = useState<Partial<FoodFacility>>({});
-  const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [location, setLocation] = useState<Location>({ longitude: "", latitude: "" });
 
   const searchKey = useMemo(() => {
@@ -34,8 +33,13 @@ export function FacilitiesProvider({ children }: FacilityProviderProps) {
 
   const locationSearchKey = useMemo(() => {
     return ["NEARBY_SEARCH", ...Object.entries(location).map(([key, value]) => `${key}=${value}`)];
-  }, [searchCriteria]);
+  }, [location]);
 
+  const locationSearchEnabled = useMemo(() => {
+    return !!location.latitude && !!location.longitude;
+  }, [location]);
+
+  console.info("searchKey", searchKey);
   const { data: facilities, isLoading: isSearchQueryLoading } = useQuery({
     queryKey: searchKey,
     queryFn: async () => getFacilities(searchCriteria),
@@ -43,6 +47,7 @@ export function FacilitiesProvider({ children }: FacilityProviderProps) {
 
   const { data: nearbyFacilities, isLoading: isNearbyQueryLoading } = useQuery({
     queryKey: locationSearchKey,
+    enabled: locationSearchEnabled,
     queryFn: async () => getNearbyFacilities(location),
   });
 
@@ -63,8 +68,8 @@ export function FacilitiesProvider({ children }: FacilityProviderProps) {
       value={{
         facilities: facilities ?? [],
         nearbyFacilities: nearbyFacilities ?? [],
-        isSearchLoading: isSearchLoading || isSearchQueryLoading,
-        setIsSearchLoading,
+        locationSearchEnabled,
+        isSearchQueryLoading,
         isNearbyQueryLoading,
         search: setSearchCriteria,
         searchName,

@@ -23,8 +23,8 @@ export const NavLinks = ({ links }: NavLinksProps) => {
   );
   return (
     <>
-      {links.map(({ displayName, url }) => (
-        <Link key={url} href={url} className={styles.link}>
+      {links.map(({ displayName, url }, i) => (
+        <Link key={i} href={url} className={styles.link}>
           {displayName}
         </Link>
       ))}
@@ -44,8 +44,8 @@ export const NavLinks = ({ links }: NavLinksProps) => {
               <Image src={closeIcon} alt="Close sidebar icon"></Image>
             </button>
           </div>
-          {links.map(({ displayName, url }) => (
-            <Link key={url} href={url} className={styles.mobileLink}>
+          {links.map(({ displayName, url }, i) => (
+            <Link key={i} href={url} className={styles.mobileLink}>
               {displayName}
             </Link>
           ))}

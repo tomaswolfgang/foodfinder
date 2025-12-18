@@ -5,17 +5,16 @@ import styles from "./SearchBar.module.scss";
 
 type SearchBarProps = {
   onSearch: (facility: Partial<FoodFacility>) => void;
-  setIsSearchLoading: (loading: boolean) => void;
 };
 
-const DEBOUNCE_TIME_MS = 100;
+const DEBOUNCE_TIME_MS = 300;
 
 enum SEARCH_TYPES {
   NAME = "name",
   STREET = "streetName",
 }
 
-export const SearchBar = ({ onSearch, setIsSearchLoading }: SearchBarProps) => {
+export const SearchBar = ({ onSearch }: SearchBarProps) => {
   const [searchText, setSearchText] = useState("");
   const [searchType, setSearchType] = useState(SEARCH_TYPES.NAME);
   const [searchStatus, setSearchStatus] = useState<Status | "">("");
@@ -50,11 +49,9 @@ export const SearchBar = ({ onSearch, setIsSearchLoading }: SearchBarProps) => {
   }, [searchType, searchText, searchStatus]);
 
   useEffect(() => {
-    setIsSearchLoading(true);
     // debounce only text changes
     const timeoutId = setTimeout(() => {
       onSearch(searchCriteria);
-      setIsSearchLoading(false);
     }, DEBOUNCE_TIME_MS);
     return () => {
       clearTimeout(timeoutId);

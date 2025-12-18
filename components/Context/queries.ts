@@ -3,6 +3,7 @@ import { FoodFacility } from "@/types";
 export type Location = {
   longitude: string;
   latitude: string;
+  allowAll?: boolean;
 };
 
 const BASE_URL = "http://localhost:3000";

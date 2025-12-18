@@ -5,14 +5,14 @@ import styles from "./page.module.scss";
 import { SearchResults } from "@/components/SearchResults";
 
 export default function Home() {
-  const { search, setIsSearchLoading, facilities, isSearchLoading } = useFacilities();
+  const { search, facilities, isSearchQueryLoading } = useFacilities();
 
   return (
     <main className={styles.pageContainer}>
       <div className={styles.stickyContent}>
-        <SearchBar onSearch={search} setIsSearchLoading={setIsSearchLoading} />
+        <SearchBar onSearch={search} />
       </div>
-      <SearchResults facilities={facilities} isLoading={isSearchLoading} />
+      <SearchResults facilities={facilities} isEnabled isLoading={isSearchQueryLoading} />
     </main>
   );
 }
