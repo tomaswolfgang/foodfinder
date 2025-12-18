@@ -1,3 +1,4 @@
+import { CustomError } from "@/app/ErrorCodes";
 import { FacilityType, FoodFacility, Status } from "@/types";
 
 export const searchBy = (
@@ -22,16 +23,14 @@ export const searchBy = (
       if (searchValue in FacilityType) {
         return facilities.filter((f) => f[property]?.toUpperCase() === searchValue.toUpperCase());
       }
-      return facilities;
-
+      throw new CustomError("INVALID_SEARCH_ENUM");
     case "status":
       // strict equality for enums
       if (searchValue in Status) {
         return facilities.filter((f) => f[property]?.toUpperCase() === searchValue.toUpperCase());
       }
-      return facilities;
+      throw new CustomError("INVALID_SEARCH_ENUM");
     default:
-      // in case function is misused, dont filter anything
-      return facilities;
+      throw new CustomError("NON_EXISTENT_SEARCH_PROPERTIES");
   }
 };

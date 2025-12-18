@@ -12,6 +12,11 @@
   width: fit-content;
   display: inline-block;
   word-wrap: break-word;
+  max-width: 85vw;
 
   @extend .interactable;
+
+  @include mixins.tablet-up {
+    max-width: none;
+  }
 }

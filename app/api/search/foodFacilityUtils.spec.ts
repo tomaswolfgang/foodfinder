@@ -1,5 +1,8 @@
 import { FacilityType, FoodFacility, Status } from "@/types";
 import { searchBy } from "./foodFacilityUtils";
+import { CustomError } from "@/app/ErrorCodes";
+
+const SHOW_LOGS = false;
 
 const mockFacilities: readonly FoodFacility[] = [
   {
@@ -36,6 +39,8 @@ const mockFacilities: readonly FoodFacility[] = [
 ];
 
 describe("foodFacilityUtils - searchBy", () => {
+  //console override to reduce logs
+  console.error = SHOW_LOGS ? console.error : jest.fn();
   it("SHOULD return original facilities WHEN no search value is present to filter on", () => {
     const resultFacilities = searchBy(mockFacilities, "id", "");
     expect(resultFacilities).toEqual(mockFacilities);
@@ -44,13 +49,10 @@ describe("foodFacilityUtils - searchBy", () => {
     expect(resultFacilities2).toEqual(mockFacilities);
   });
 
-  it("SHOULD return original facilities WHEN property is not a searchable key", () => {
-    const resultFacilities = searchBy(
-      mockFacilities,
-      "some-random-key" as keyof FoodFacility,
-      "test"
+  it("SHOULD throw 400 error WHEN attempting to search by an non existent property", () => {
+    expect(() => searchBy(mockFacilities, "some-random-key" as keyof FoodFacility, "test")).toThrow(
+      new CustomError("NON_EXISTENT_SEARCH_PROPERTIES")
     );
-    expect(resultFacilities).toEqual(mockFacilities);
   });
 
   describe("Filtering on search keys", () => {
@@ -99,11 +101,12 @@ describe("foodFacilityUtils - searchBy", () => {
       const resultFacilities = searchBy(mockFacilities, prop, value);
       expect(resultFacilities).toEqual([mockFacilities.find((f) => f[prop] === value)]);
     });
-    it("SHOULD NOT filter on [facilityType] WHEN value is NOT valid enum value", () => {
+    it("SHOULD throw 400 error WHEN value is NOT valid enum value", () => {
       const prop: keyof FoodFacility = "facilityType";
       const value = "some random value" as FacilityType;
-      const resultFacilities = searchBy(mockFacilities, prop, value);
-      expect(resultFacilities).toEqual(mockFacilities);
+      expect(() => searchBy(mockFacilities, prop, value)).toThrow(
+        new CustomError("INVALID_SEARCH_ENUM")
+      );
     });
 
     it("SHOULD filter on [status] WHEN  value is set AND is a valid enum value", () => {
@@ -112,11 +115,12 @@ describe("foodFacilityUtils - searchBy", () => {
       const resultFacilities = searchBy(mockFacilities, prop, value);
       expect(resultFacilities).toEqual([mockFacilities.find((f) => f[prop] === value)]);
     });
-    it("SHOULD NOT filter on [status] WHEN value is NOT valid enum value", () => {
+    it("SHOULD throw 400 error WHEN value is NOT valid enum value", () => {
       const prop: keyof FoodFacility = "status";
       const value = "some random value" as Status;
-      const resultFacilities = searchBy(mockFacilities, prop, value);
-      expect(resultFacilities).toEqual(mockFacilities);
+      expect(() => searchBy(mockFacilities, prop, value)).toThrow(
+        new CustomError("INVALID_SEARCH_ENUM")
+      );
     });
   });
 });

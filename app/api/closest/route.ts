@@ -1,18 +1,28 @@
 import { NextRequest } from "next/server";
-import { getClosestFacilities, loadAllData } from "../db";
+import { getClosestFacilities } from "../db";
+import { CustomError, ERROR_CODES, toErrorMessage } from "@/app/ErrorCodes";
 
 export async function GET(request: NextRequest) {
-  const longitudeQuery = request.nextUrl.searchParams.get("longitude");
-  const latitudeQuery = request.nextUrl.searchParams.get("latitude");
-  const onlyApproved = request.nextUrl.searchParams.get("onlyApproved") !== "false";
-  const longitude =
-    longitudeQuery && !isNaN(Number(longitudeQuery)) ? Number(longitudeQuery) : null;
-  const latitude = latitudeQuery && !isNaN(Number(latitudeQuery)) ? Number(latitudeQuery) : null;
+  try {
+    const longitudeQuery = request.nextUrl.searchParams.get("longitude");
+    const latitudeQuery = request.nextUrl.searchParams.get("latitude");
+    const allowAll = request.nextUrl.searchParams.get("allowAll") === "true";
+    const longitude =
+      longitudeQuery && !isNaN(Number(longitudeQuery)) ? Number(longitudeQuery) : null;
+    const latitude = latitudeQuery && !isNaN(Number(latitudeQuery)) ? Number(latitudeQuery) : null;
 
-  if (longitude !== null && latitude !== null) {
-    const closeFacilities = await getClosestFacilities(longitude, latitude, onlyApproved);
-    return Response.json(closeFacilities);
+    if (longitude !== null && latitude !== null) {
+      const closeFacilities = await getClosestFacilities(longitude, latitude, allowAll);
+      return Response.json(closeFacilities);
+    }
+    throw new CustomError("INVALID_LOCATION_PAYLOAD");
+  } catch (err) {
+    if (err instanceof CustomError) {
+      return Response.json({ error: err.message }, { status: err.status });
+    }
+    console.error(err);
+
+    const { code, status } = ERROR_CODES.UNKNOWN;
+    return Response.json({ error: toErrorMessage(code) }, { status });
   }
-
-  return Response.json([]);
 }

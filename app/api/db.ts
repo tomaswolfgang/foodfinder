@@ -4,7 +4,7 @@ import { type FoodFacility, type FoodFacilityCSV, Status } from "@/types";
 import BigNumber from "bignumber.js";
 import { prettifyCsvData } from "./transformers";
 
-const DATASTORE_FILE =
+export const DATASTORE_FILE =
   "/Users/thomaswong/Documents/projects/learning/interviewTrials/Rad AI/radai-take-home/app/api/data.csv";
 
 const NEAREST_LIMIT = 5;
@@ -24,7 +24,7 @@ export const loadAllData = () =>
       });
   });
 
-type FoodFacilityWithDistance = FoodFacility & { absoluteDistance: BigNumber };
+export type FoodFacilityWithDistance = FoodFacility & { absoluteDistance: BigNumber };
 
 export const calculateNearestFacilities = (
   currentNearest: FoodFacilityWithDistance[],
@@ -46,12 +46,14 @@ export const calculateNearestFacilities = (
     ];
 
     return newNearest.length > NEAREST_LIMIT ? newNearest.slice(0, 5) : newNearest;
+  } else if (currentNearest.length < NEAREST_LIMIT) {
+    return [...currentNearest, facilityToCheck];
   }
 
   return currentNearest;
 };
 
-export const getClosestFacilities = (longitude: number, latitude: number, approvedOnly = true) =>
+export const getClosestFacilities = (longitude: number, latitude: number, allowAll = false) =>
   new Promise<readonly FoodFacility[]>((resolve, reject) => {
     let results: FoodFacilityWithDistance[] = [];
 
@@ -59,7 +61,7 @@ export const getClosestFacilities = (longitude: number, latitude: number, approv
       .pipe(csv())
       .on("data", (data: FoodFacilityCSV) => {
         const foodFacility = prettifyCsvData(data);
-        if (approvedOnly && foodFacility.status !== Status.APPROVED) return;
+        if (!allowAll && foodFacility.status !== Status.APPROVED) return;
 
         // TECHNICALLY we should use Harversine distance formula to calculate true proximity using longitude and latitude
         // but for simplicity I'm sticking with good ole pythagoras

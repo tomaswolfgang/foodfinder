@@ -2,48 +2,26 @@
  * @jest-environment node
  */
 import { GET } from "./route";
-import { FacilityType, FoodFacility, Status } from "@/types";
+import { loadAllData } from "../db";
+import { searchBy } from "./foodFacilityUtils";
+import { CustomError, ERROR_CODES, toErrorMessage } from "@/app/ErrorCodes";
 
-const mockFacilities: readonly FoodFacility[] = [
-  {
-    id: "mockId1",
-    name: "mockName1",
-    streetName: "mockStreetName1",
-    streetNumber: 1,
-    longitude: 1,
-    latitude: 1,
-    status: Status.APPROVED,
-    facilityType: FacilityType.PUSH_CART,
-    foodItems: "mockFoodItems1",
-    permit: "mockPermit1",
-  },
-  {
-    id: "mockId2",
-    name: "mockName2",
-    longitude: 2,
-    latitude: 2,
-    status: Status.SUSPEND,
-    foodItems: "mockFoodItems2",
-    permit: "mockPermit2",
-  },
-  {
-    id: "mockId3",
-    name: "mockName3",
-    longitude: 3,
-    latitude: 3,
-    status: Status.REQUESTED,
-    facilityType: FacilityType.TRUCK,
-    foodItems: "mockFoodItems3",
-    permit: "mockPermit3",
-  },
-];
+const SHOW_LOGS = false;
+
+const mockData = [{ test: "test" }];
 
 jest.mock("../db", () => ({
-  loadAllData: jest.fn(() => mockFacilities),
+  loadAllData: jest.fn(() => mockData),
+}));
+
+jest.mock("./foodFacilityUtils", () => ({
+  searchBy: jest.fn(() => mockData),
 }));
 
 describe("GET /api/search", () => {
-  it("should return items with status 200", async () => {
+  //console override to reduce logs
+  console.error = SHOW_LOGS ? console.error : jest.fn();
+  it("SHOULD search by every key value pair WHEN called", async () => {
     const mockParamObject = {
       id: "mockId1",
       name: "mockName1",
@@ -64,14 +42,20 @@ describe("GET /api/search", () => {
     };
     // Call the handler function directly
     const response = await GET(mockRequest);
-    const body = await response.json();
+
+    expect(searchBy).toHaveBeenCalledTimes(Object.keys(mockParamObject).length);
+    Object.keys(mockParamObject).forEach((key) => {
+      expect(searchBy).toHaveBeenCalledWith(
+        mockData,
+        key,
+        mockParamObject[key as keyof typeof mockParamObject]
+      );
+    });
 
     expect(response.status).toBe(200);
-    expect(body.length).toBe(1);
-    expect(body[0]).toEqual(mockFacilities[0]);
   });
 
-  it("should return multiple items with status 200", async () => {
+  it("SHOULD respond with custom error code and status WHEN CustomError is thrown during execution", async () => {
     const mockParamObject = {
       id: "mock",
     };
@@ -81,12 +65,35 @@ describe("GET /api/search", () => {
         searchParams: new URLSearchParams(mockParamObject),
       },
     };
+    (searchBy as jest.Mock).mockImplementationOnce(() => {
+      throw new CustomError("INVALID_SEARCH_ENUM");
+    });
     // Call the handler function directly
     const response = await GET(mockRequest);
     const body = await response.json();
 
-    expect(response.status).toBe(200);
-    expect(body.length).toBe(3);
-    expect(body).toEqual(mockFacilities);
+    expect(response.status).toBe(400);
+    expect(body).toEqual({ error: toErrorMessage(ERROR_CODES.INVALID_SEARCH_ENUM.code) });
+  });
+
+  it("SHOULD respond with 500 status WHEN random error occurs during execution", async () => {
+    const mockParamObject = {
+      id: "mock",
+    };
+
+    const mockRequest: any = {
+      nextUrl: {
+        searchParams: new URLSearchParams(mockParamObject),
+      },
+    };
+    (loadAllData as jest.Mock).mockImplementationOnce(() => {
+      throw Error("random error");
+    });
+    // Call the handler function directly
+    const response = await GET(mockRequest);
+    const body = await response.json();
+
+    expect(response.status).toBe(500);
+    expect(body).toEqual({ error: toErrorMessage(ERROR_CODES.UNKNOWN.code) });
   });
 });
