@@ -155,7 +155,7 @@ A lot of this depends on if we need to support changes in the underlying data an
 
 ## steps to run
 
-**Please add the absolute path to the csv in the `.env` file.**
+### **Please add the absolute path to the csv in the `.env` file.**
 
 Something was odd about setting up my path to the csv using \_\_dirname and I ended up needing to use an absolute path
 
