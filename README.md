@@ -50,6 +50,8 @@ To ensure the data contract between the client and server is as tight as possibl
 
 I opted to convert the existing CSV (`FoodFacilityCSV`) data into a slightly different data structure (`FoodFacility`). I did this to normalize the properties to use camel-case and to parse out the components of the address in order to support searching by just the street name and account for special `Assessors` scenarios all in a single place.
 
+On the note of `Assessors` address, I was unsure how to actually interpret the address, so for simplicity and speed, I considered and `Assessors` address as the `streetName` for a facility.
+
 I thought about writing a script to create a new csv with the updated format, but due to time constraints, just kept the existing format and leveraged my `prettifyCsvData` transformer function.
 
 For responses, I utilized a pared down `FoodFacilityResponse` type and a `toFoodFacilityResponse` transformer function so that new fields added to the underlying data wouldn't result in those fields unintentionally making it into the UI.
