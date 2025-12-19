@@ -117,6 +117,8 @@ Some other add ons and fixes I was thinking about adding:
 - internationalization
 - UI unit tests
 
+---
+
 ### Tradeoffs
 
 - I made a point above about how I tried to balance the using context and over-coupling the UI with state.
@@ -124,6 +126,8 @@ Some other add ons and fixes I was thinking about adding:
 - Custom errors is more development overhead and depending on the application we might want to expose more error information to the client in order to provide user feedback i.e. if there was an add new facility option, the error code might want a more descriptive message to surface to the user in the form of a snack bar.
 
 - Parsing CSV every time vs in-memory caching: going back to the point about treating the `db.ts` file like it was a DB, while in-memory caching would have sped up reponse times, I felt that the dataset was small enough that this kind of optimization would have a negligable impact, and so I opted to focus on data correctness instead.
+
+---
 
 ### Left out
 
@@ -135,6 +139,8 @@ As a general note, my MVP goal was complete, data-hardened, functioning applicat
 - the map - while this was great in theory, the implementation required more time than I had especially with inevitable time dedicated to troubleshooting
 - input and button styling - I opted for function over form, with the intention of making things pretty if I got ahead of schedule.
 - More restrictive FE input validation - I added some pieces to this like making the coordinates `type=number` and adding max and min, but since the API was built to handle incorrect inputs, I felt that while the FE validation was still important and would be a nice touch, ultimately, some of the more edge case validations weren't critical for my MVP.
+
+---
 
 ### problems with scaling users
 
@@ -167,28 +173,32 @@ A lot of this depends on if we need to support changes in the underlying data an
 
 ## Steps to run
 
-### **Please add the absolute path to the csv in the `.env` file.**
+**Please add the absolute path to the csv in the `.env` file.**
 
 Something was odd about setting up my path to the csv using \_\_dirname and I ended up needing to use an absolute path
 
 ### Running the project locally (PNPM)
 
-1. run `pnpm i`
-2. run `pnpm dev`
-3. open your browser to `http://localhost:3000`
+1. create your `.env` file with the proper csv path
+2. run `pnpm i`
+3. run `pnpm dev`
+4. open your browser to `http://localhost:3000`
 
 ### Testing
 
-1. run `pnpm i`
-2. run `pnpm test`
+1. create your `.env` file with the proper csv path
+2. run `pnpm i`
+3. run `pnpm test`
 
 ### Running the project locally (NPM)
 
-1. run `npm i`
-2. run `npm run dev`
-3. open your browser to `http://localhost:3000`
+1. create your `.env` file with the proper csv path
+2. run `npm i`
+3. run `npm run dev`
+4. open your browser to `http://localhost:3000`
 
 ### Testing
 
-1. run `npm i`
-2. run `npm run test`
+1. create your `.env` file with the proper csv path
+2. run `npm i`
+3. run `npm run test`
