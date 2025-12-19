@@ -82,6 +82,7 @@ export const LocationBar = ({ onSearch }: SearchBarProps) => {
           onKeyDown={(evt) => ["e", "E", "+"].includes(evt.key) && evt.preventDefault()}
           onChange={onSearchLongitudeUpdate}
           placeholder="Enter Longitude Here"
+          aria-label="longitude input"
         />
         <input
           id="latitudeInput"
@@ -93,6 +94,7 @@ export const LocationBar = ({ onSearch }: SearchBarProps) => {
           onKeyDown={(evt) => ["e", "E", "+"].includes(evt.key) && evt.preventDefault()}
           onChange={onSearchLatitudeUpdate}
           placeholder="Enter Latitude Here"
+          aria-label="latitude input"
         />
         <button onClick={search}> Search!</button>
       </div>

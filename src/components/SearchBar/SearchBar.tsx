@@ -72,6 +72,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
           value={searchText}
           onChange={onSearchTextUpdate}
           placeholder="Enter Search Query Here"
+          aria-label="Search input"
         />
         <select
           id="searchTypeSelect"
@@ -79,6 +80,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
           className={styles.searchTypeSelector}
           onChange={onSearchTypeUpdate}
           value={searchType}
+          aria-label="Dropdown for Search type"
         >
           <option key={SEARCH_TYPES.NAME} value={SEARCH_TYPES.NAME}>
             Search By Name
