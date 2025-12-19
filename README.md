@@ -46,12 +46,21 @@ To ensure the data contract between the client and server is as tight as possibl
 
 ---
 
+### Data normalization
+
+I opted to convert the existing CSV (`FoodFacilityCSV`) data into a slightly different data structure (`FoodFacility`). I did this to normalize the properties to use camel-case and to parse out the components of the address in order to support searching by just the street name and account for special `Assessors` scenarios all in a single place.
+
+I thought about writing a script to create a new csv with the updated format, but due to time constraints, just kept the existing format and leveraged my `prettifyCsvData` transformer function.
+
+For responses, I utilized a pared down `FoodFacilityResponse` type and a `toFoodFacilityResponse` transformer function so that new fields added to the underlying data wouldn't result in those fields unintentionally making it into the UI.
+
+---
+
 ### Error handling
 
-Using CustomError might have also a bit overkill (noticing a trend yet?)
-This is both a security and observability feature.
+Using CustomError might have been a bit overkill, but this is both a security and observability feature.
 Only custom error codes are exposed to the front-end, obfuscating any details about server execution from the client in case some bad actor is trying to understand how our server operates.
-While on the server, we get some automatic logs, stack traces that we can setup monitoring for.
+While on the server, we get some automatic logs, stack traces and codes that we can setup monitoring for.
 The error structure and specific codes mean that tracking down issues in production will be much easier.
 
 ---
@@ -125,7 +134,7 @@ Some other add ons and fixes I was thinking about adding:
 - I made server responses a dedicated type and extremely restrictive in the information provided. This was a plus in terms of minimizing response payload and only sending what the UI needs, but as the UI starts to expand and require more info from the backend, making changes to the data contract will come with more developer overhead.
 - Custom errors is more development overhead and depending on the application we might want to expose more error information to the client in order to provide user feedback i.e. if there was an add new facility option, the error code might want a more descriptive message to surface to the user in the form of a snack bar.
 
-- Parsing CSV every time vs in-memory caching: going back to the point about treating the `db.ts` file like it was a DB, while in-memory caching would have sped up reponse times, I felt that the dataset was small enough that this kind of optimization would have a negligable impact, and so I opted to focus on data correctness instead.
+- Parsing CSV every time vs in-memory caching: going back to the point about treating the `db.ts` file like it was a DB, while in-memory caching would have sped up reponse times, I felt that the dataset was small enough that this kind of optimization would have a negligable impact, and so I opted to focus on data correctness and always sourcing from the "DB" instead.
 
 ---
 
@@ -134,7 +143,7 @@ Some other add ons and fixes I was thinking about adding:
 I feel like all the items I left out ARE things I would have tried to do had I had more time to work on this.
 But in an effort to not have a full cop out answer, here are some reasons that I opted to prioritize other items over some of the bullets in my "more time" answer:
 
-As a general note, my MVP goal was complete, data-hardened, functioning application that fulfilled the requirements, so I prioritized API data validation, requirements, and performance. By the time I had built out the rough scaffolding for the UI, I could already tell that I wouldn't be able to do everything I envisioned.
+As a general note, my MVP goal was a complete, data-hardened, functioning application that fulfilled the requirements, so I prioritized API data validation, requirements, and performance. By the time I had built out the rough scaffolding for the UI, I could already tell that I wouldn't be able to do everything I envisioned.
 
 - the map - while this was great in theory, the implementation required more time than I had especially with inevitable time dedicated to troubleshooting
 - input and button styling - I opted for function over form, with the intention of making things pretty if I got ahead of schedule.
@@ -148,9 +157,8 @@ Problems:
 
 - My app only supports english and has hard coded text.
 - I don't have accessibility rules off the top of my head, but I'm almost sure that an accessibility audit would reveal a lot of things that need fixing.
--
 
-So say the requirements for the app didn't change (and the data didnt change?) and we wanted to support more users/higher traffic, I feel like there are 2 ways to asnwer this:
+So say the requirements for the app didn't change (and the data didnt change?) and we wanted to support more users/higher traffic, I feel like there are 2 ways to answer this:
 
 First: application specific considerations - how I would change the application code to scale to more users.
 
@@ -164,10 +172,11 @@ A lot of this depends on if we need to support changes in the underlying data an
 
 - Setting up multiple containerized, auto-scaled servers with load-balancing based on request rate
 - Setting up a CDN to cache assets and pages and also serve the site closer to the users accessing it.
-- Rolling the csv data into a database for faster querying and updates so all servers can have the same source of truth
+- Creating an ETL process to load our prettified csv data into a DB for faster querying and updates so all servers can have the same source of truth
 - By indexing on the right keys we can have faster lookup times than scanning every line of a CSV.
 - We might consider using something like PostGIS to add geospatial indexing on the coordinates for faster proximity lookups
-- Scaling out the database to have read-replicas across the world to speed up response times
+- Scaling out the database to have read-replicas across the world to speed up DB response times
+- caching "hot", frequently-used queries in regional redis clusters with a TTL of ~1 day and a LRU eviction strategy to offload request pressure on the DB
 
 ---
 
