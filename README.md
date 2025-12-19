@@ -188,6 +188,8 @@ A lot of this depends on if we need to support changes in the underlying data an
 
 Something was odd about setting up my path to the csv using \_\_dirname and I ended up needing to use an absolute path
 
+Node version: 22.16.0
+
 ### Running the project locally (PNPM)
 
 1. create your `.env` file with the proper csv path
