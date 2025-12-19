@@ -4,8 +4,6 @@ I appreciate you taking the time to review my work!
 
 ---
 
-# Problem - Solution
-
 ## Problem
 
 Customers are trying to find Mobile Food Facilities around SF
@@ -64,7 +62,7 @@ Honesty for a small project like this that doesn't require much nesting, there's
 I'd say the downsides of context is the tight coupling you get between the context and anything using it. I tried to mitigate this by limiting context usage to the page level and keeping most components decoupled.
 The other downside is what kind of started to happen when I began implementing the `/nearby` page, which is the context started assuming 2 roles and becoming a catch-all context which is definitely a no-no but I think given the small scale of the application itself, it still felt reasonable.
 
-#### on the design front...
+#### On the design front...
 
 I swear I tried to make things pretty, but alas, this is why I am not a designer.
 
@@ -72,7 +70,7 @@ My main target was ensuring the design was at least responsive.
 
 I tried to keep styling relatively consistent via variables, extensions and mixins.
 
-### packages used
+### Packages used
 
 - csv-parser - converting csv to a json structure
 - react-query - request caching
@@ -105,7 +103,7 @@ Some other add ons and fixes I was thinking about adding:
 - internationalization
 - UI unit tests
 
-### tradeoffs
+### Tradeoffs
 
 - I made a point above about how I tried to balance the using context and over-coupling the UI with state.
 - I made server responses a dedicated type and extremely restrictive in the information provided. This was a plus in terms of minimizing response payload and only sending what the UI needs, but as the UI starts to expand and require more info from the backend, making changes to the data contract will come with more developer overhead.
@@ -153,7 +151,7 @@ A lot of this depends on if we need to support changes in the underlying data an
 
 ---
 
-## steps to run
+## Steps to run
 
 ### **Please add the absolute path to the csv in the `.env` file.**
 
