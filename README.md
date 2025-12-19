@@ -21,11 +21,15 @@ An application that allows them to search for various food facilities using vari
 NextJs provides scaffolding and boilerplate for the server and client implementation, which allowed me to hit the ground running across the stack.
 Things like, the app routing system, a structure that allowed shared types all worked to reduce the development overhead.
 
+---
+
 ### Routes vs Next JS Server Functions
 
 Opted for routes so I could test endpoints using postman during api development.
 Using routes also opened the door for documenting the API with the `open-api-spec.yaml`.
 Moreover, with all the drama around React2Shell, I figured it wass probably better to stay away from server functions for the time being.
+
+---
 
 ### `/api/closest` and `/api/search` implementation. Why filter the ReadStream?
 
@@ -34,9 +38,13 @@ I wanted to have the db file (which reads the csv) act like a database to simula
 Why filter in the ReadStream? This is a scalability choice. Obviously it's a bit overkill for a csv with only ~400 lines BUT IF we had to parse through a much larger csv, it would be extremely memory intensive to load all those lines into a variable and then filter through.
 Checking for valid values as we iterate through the lines of the csv minimizes both the memory footprint (only loading in what you need to into memory) and the computational footprint (filtering at the stream level means linearly scaling computation with file size).
 
+---
+
 ### Request Validation
 
 To ensure the data contract between the client and server is as tight as possible. I added restrictive types and query construction on the front-end, along with a secondary server validation layer that checks that parameter keys are valid and enum values are exact.
+
+---
 
 ### Error handling
 
@@ -46,9 +54,13 @@ Only custom error codes are exposed to the front-end, obfuscating any details ab
 While on the server, we get some automatic logs, stack traces that we can setup monitoring for.
 The error structure and specific codes mean that tracking down issues in production will be much easier.
 
+---
+
 ### Distance calculation
 
 To calculate relative distances to specific coordinates, instead of using the Haversine distance formula to calculate exact distances, I opted for a simpler euclidian calculation as I had limited time to build this and the pythagorean theorem provided a similarly functioning heuristic I could leverage for the time being.
+
+---
 
 ### FE Design and style choices
 
@@ -69,6 +81,8 @@ I swear I tried to make things pretty, but alas, this is why I am not a designer
 My main target was ensuring the design was at least responsive.
 
 I tried to keep styling relatively consistent via variables, extensions and mixins.
+
+---
 
 ### Packages used
 
