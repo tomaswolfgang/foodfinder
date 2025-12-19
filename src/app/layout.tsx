@@ -4,6 +4,7 @@ import "@styles/global.scss";
 import { Header } from "@components/Header";
 import { Footer } from "@components/Footer";
 import { FacilitiesProvider, QueryProvider } from "@/components/Context";
+import styles from "./page.module.scss";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +31,11 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Header />
         <QueryProvider>
-          <FacilitiesProvider>{children}</FacilitiesProvider>
+          <FacilitiesProvider>
+            <main className={styles.pageContainer}>
+              <div className={styles.pageContent}>{children}</div>
+            </main>
+          </FacilitiesProvider>
         </QueryProvider>
         <Footer />
       </body>

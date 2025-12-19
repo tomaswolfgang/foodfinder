@@ -4,13 +4,13 @@
 .pageContainer {
   height: calc(100vh - variables.$mobile-footer-height - variables.$mobile-header-height);
   max-height: calc(100vh - variables.$mobile-footer-height - variables.$mobile-header-height);
-  width: 100%;
+  width: 100vw;
   box-sizing: border-box;
   background-color: variables.$color-background-2;
-  padding: variables.$padding;
   overflow-y: scroll;
 
   @include mixins.tablet-up {
+    padding: variables.$padding;
     height: calc(100vh - variables.$footer-height - variables.$header-height);
     max-height: calc(100vh - variables.$footer-height - variables.$header-height);
   }
@@ -19,4 +19,35 @@
 .stickyContent {
   position: sticky;
   top: 0;
+  border-bottom: variables.$border;
+  padding: variables.$padding-mobile;
+  background-color: variables.$color-background;
+
+  @include mixins.tablet-up {
+    border-radius: 2rem 2rem 0 0;
+    top: -1.5rem;
+    padding: variables.$padding;
+  }
+}
+
+.pageContent {
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  background-color: variables.$color-background;
+  box-sizing: border-box;
+  min-height: calc(100vh - variables.$mobile-footer-height - variables.$mobile-header-height);
+
+  @include mixins.tablet-up {
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+    max-width: 700px;
+    width: 700px;
+    border-radius: 2rem;
+    min-height: 300px;
+  }
+  @include mixins.desktop-up {
+    max-width: 912px;
+    width: 912px;
+  }
 }

@@ -8,11 +8,11 @@ export default function Home() {
   const { search, facilities, isSearchQueryLoading } = useFacilities();
 
   return (
-    <main className={styles.pageContainer}>
+    <>
       <div className={styles.stickyContent}>
         <SearchBar onSearch={search} />
       </div>
       <SearchResults facilities={facilities} isEnabled isLoading={isSearchQueryLoading} />
-    </main>
+    </>
   );
 }

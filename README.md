@@ -84,8 +84,18 @@ I tried to keep styling relatively consistent via variables, extensions and mixi
 ### If I had more time...
 
 My original vision was having a map interface that pins displayed all the food facilities according to their coordinates.
-Filtering would've filtered the pins down to the relevant list of facilities. I was also planning on filtering on more than just name, street name and status.
+Filtering would've filtered the pins down to the relevant list of facilities.
 Hovering over pins would show a tooltip with the facility information (like facility type, etc.)
+
+Some other additions include:
+
+- Fixing a the overlay with the facility popovers still allowing hover states under the popover
+- adding better input and button styling - maybe having custom button and input components
+- More thorough FE input validation i.e restricting special characters
+- Addiitonal filter options i.e. facilityType, foodItems
+- Adding a "my location" button in the `/nearby` page to autopopulate using users current location
+- accessibility fixes using lighthouse to run an audit
+- internationalization
 
 ### tradeoffs
 

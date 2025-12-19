@@ -39,3 +39,13 @@ body {
     background-color: variables.$color-focus;
   }
 }
+
+.interactable-secondary {
+  cursor: pointer;
+  @extend .transition;
+  background-color: variables.$color-background;
+
+  &:hover {
+    background-color: variables.$color-secondary;
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 import { LocationBar } from "@components/LocationBar";
 import { useFacilities } from "@components/Context";
-import styles from "./page.module.scss";
+import styles from "../page.module.scss";
 import { SearchResults } from "@/components/SearchResults";
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
     useFacilities();
 
   return (
-    <main className={styles.pageContainer}>
+    <>
       <div className={styles.stickyContent}>
         <LocationBar onSearch={searchLocation} />
       </div>
@@ -18,6 +18,6 @@ export default function Home() {
         isEnabled={locationSearchEnabled}
         isLoading={isNearbyQueryLoading}
       />
-    </main>
+    </>
   );
 }

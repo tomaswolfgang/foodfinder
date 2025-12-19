@@ -2,21 +2,97 @@
 @use "@styles/variables";
 @use "@styles/mixins";
 
+.allResultsContainer {
+  width: 100%;
+}
+
+.searchResultContainer {
+  margin: 1rem auto;
+  display: flex;
+  @include mixins.tablet-up {
+    margin: variables.$padding;
+    display: inline-flex;
+    vertical-align: middle;
+  }
+}
+.approved {
+  background-color: rgb(232, 255, 232);
+}
+.pending {
+  background-color: rgb(255, 255, 227);
+}
+.rejected {
+  background-color: rgb(255, 236, 236);
+}
 .searchResult {
-  background-color: variables.$color-background;
   border: variables.$border;
   padding: variables.$padding;
-  margin: 0.5rem;
+  margin: 1rem auto;
   box-sizing: border-box;
   border-radius: 1rem;
-  width: fit-content;
-  display: inline-block;
+  width: 85vw;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   word-wrap: break-word;
-  max-width: 85vw;
+  text-align: center;
+  vertical-align: middle;
 
-  @extend .interactable;
+  @extend .interactable-secondary;
 
   @include mixins.tablet-up {
-    max-width: none;
+    width: 201px;
+    height: 150px;
+    font-size: 1rem;
   }
+
+  @include mixins.desktop-up {
+    width: 196px;
+    height: 150px;
+  }
+}
+
+.popover {
+  &:popover-open {
+    min-height: 200px;
+    max-width: 100vw;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border-radius: 2rem;
+    border: variables.$border;
+  }
+
+  .propRow {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    &:not(:first-child) {
+      padding-top: variables.$padding;
+    }
+  }
+  .label {
+    color: variables.$color-text-secondary;
+    width: 25%;
+    min-width: 25%;
+  }
+
+  .value {
+    color: variables.$color-text-primary;
+  }
+
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.emptyResults {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

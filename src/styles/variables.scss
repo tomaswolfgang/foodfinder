@@ -13,7 +13,7 @@ $color-text-subtle: #929292;
 
 // ---- media query -----
 $media-tablet: 768px;
-$media-desktop: 912px;
+$media-desktop: 1000px;
 
 // ----- spacing, position, and depth -----
 $padding: 1rem;
@@ -23,6 +23,7 @@ $padding-mobile: 0.5rem;
 $transition-time: 0.2s;
 $border-radius: 5px;
 $border: solid 1px $color-border;
+$border-primary: solid 1px $color-primary;
 $border-emphasis: solid 2px $color-border-emphasis;
 
 $header-height: 100px;
